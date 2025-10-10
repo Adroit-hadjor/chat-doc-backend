@@ -40,6 +40,9 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static("public"));
 
+app.get("/health", (req, res) => res.status(200).send("ok"));
+
+
 const upload = multer({ storage: multer.memoryStorage() });
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
