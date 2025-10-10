@@ -36,7 +36,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // Serve static frontend (public/index.html)
-app.use(cors({ origin: ["http://localhost:8082"], credentials: false }));
+//app.use(cors({ origin: ["http://localhost:8082"], credentials: false }));
+app.use(cors());
 app.use(express.static("public"));
 
 const upload = multer({ storage: multer.memoryStorage() });
