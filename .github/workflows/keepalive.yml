@@ -1,0 +1,34 @@
+name: Keep Render App Awake
+
+on:
+  schedule:
+    # Every 5 minutes (GitHub Actions uses UTC; Accra is UTC±0, so this is exact)
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}  # allow manual runs
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping Render health endpoint
+        env:
+          URL: ${{ secrets.RENDER_HEALTH_URL }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "Missing RENDER_HEALTH_URL secret"; exit 1
+          fi
+
+          echo "Pinging $URL ..."
+          # 3 attempts, fail if non-2xx after retries
+          for i in 1 2 3; do
+            STATUS=$(curl -fsS -o /dev/null -w "%{http_code}" "$URL" || true)
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
+              echo "OK"; exit 0
+            fi
+            sleep 5
+          done
+
+          echo "Ping failed after retries"
+          exit 1
