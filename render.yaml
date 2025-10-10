@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: rag-node
+    env: node
+    plan: free
+    rootDir: .
+    buildCommand: npm ci
+    startCommand: node server.js
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false  # set in Render dashboard
+      - key: CHROMA_URL
+        fromService:
+          name: chroma-db
+          type: pserv
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: CHROMA_COLLECTION
+        value: docs
+    runtime: node
+    region: frankfurt # or the closest to Ghana with acceptable latency
+
+  - type: pserv
+    name: chroma-db
+    env: docker
+    plan: free
+    dockerCommand: ""
+    dockerContext: .
+    dockerfilePath: ./Dockerfile.chroma
+    autoDeploy: true
+    disk:
+      name: chroma-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: CHROMA_SERVER_AUTHN_PROVIDER
+        value: token
+      - key: CHROMA_SERVER_AUTHN_CREDENTIALS
+        sync: false  # set token in dashboard, e.g. "supersecrettoken"
+      - key: PERSIST_DIRECTORY
+        value: /data

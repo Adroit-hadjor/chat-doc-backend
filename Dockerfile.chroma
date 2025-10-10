@@ -1,0 +1,3 @@
+FROM ghcr.io/chroma-core/chroma:latest
+# Render will run the image; default CMD starts the server on :8000
+# We persist to /data (mounted disk) via PERSIST_DIRECTORY
