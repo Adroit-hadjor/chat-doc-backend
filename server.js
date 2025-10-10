@@ -6,7 +6,17 @@ import OpenAI from "openai";
 import { createRequire } from "module";
 import cors from "cors";
 
-import { ChromaClient } from "chromadb";
+import { CloudClient } from "chromadb";
+
+/* 
+import { CloudClient } from "chromadb";
+
+const client = new CloudClient({
+  apiKey: 'ck-9sJmqLZTk3aZWMyZi3J52bCg9ygR5xPe69mSuLeRavdE',
+  tenant: '2173990a-43ae-43df-8fa3-2df15741fc50',
+  database: 'DOC_BACKEND'
+});
+*/
 
 const require = createRequire(import.meta.url);
 
@@ -62,13 +72,12 @@ async function topKMemory(query, k = 3) {
 async function initVectorStore() {
   try {
     if (process.env.CHROMA_URL) {
-      chroma = new ChromaClient({
-  path: process.env.CHROMA_URL, // Render injects https://chroma-db.onrender.com
-  auth: {
-    provider: "token",
-    credentials: process.env.CHROMA_TOKEN, // add to Node service env
-  },
-});
+    chroma = new CloudClient({
+    apiKey: process.env.CHROMA_API_KEY,
+    // You can omit these if your Cloud account has defaults set:
+    tenant: process.env.CHROMA_TENANT,
+    database: process.env.CHROMA_DATABASE,
+  });
        collection = await chroma.getOrCreateCollection({
   name: process.env.CHROMA_COLLECTION || "docs",
 });
