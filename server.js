@@ -186,7 +186,7 @@ app.post("/ask", async (req, res) => {
     const context = topDocs.join("\n---\n");
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-5",
       messages: [
         { role: "system", content: "Answer using only the provided context. If unsure, say you don't know." },
         { role: "user", content: `Context:\n${context}\n\nQuestion:\n${query}` },
