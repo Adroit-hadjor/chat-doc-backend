@@ -68,7 +68,7 @@ async function topKMemory(query, k = 3) {
   const q = emb.data[0].embedding;
   return memStore
     .map(s => ({ ...s, score: cosine(q, s.embedding) }))
-    .sort((a,b) => b.score - a.score);
+    .sort((a,b) => b.score - a.score)
     .slice(0, k)
     .map(x => x.text);
 }
