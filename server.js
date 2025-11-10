@@ -26,7 +26,7 @@ const pdfParse = typeof rawPdfParse === "function" ? rawPdfParse : rawPdfParse?.
 const rawMammoth = require("mammoth");
 const mammoth = rawMammoth?.default ?? rawMammoth;
 
-if (typeof pdfParse !== "function") {
+if (typeof pdfParse !== "function" {
   throw new Error("pdf-parse did not resolve to a function. Try `npm i pdf-parse@1`.");
 }
 
@@ -68,7 +68,7 @@ async function topKMemory(query, k = 3) {
   const q = emb.data[0].embedding;
   return memStore
     .map(s => ({ ...s, score: cosine(q, s.embedding) }))
-    .sort((a,b) => b.score - a.score);
+    .sort((a,b) => b.score - a.score)
     .slice(0, k)
     .map(x => x.text);
 }
