@@ -24,7 +24,7 @@ const rawPdfParse = require("pdf-parse");
 const pdfParse = typeof rawPdfParse === "function" ? rawPdfParse : rawPdfParse?.default;
 
 const rawMammoth = require("mammoth");
-const mammoth = rawMammoth?.default ?? rawMammoth;
+const  = rawMammoth?.default ?? rawMammoth;
 
 if (typeof pdfParse !== "function") {
   throw new Error("pdf-parse did not resolve to a function. Try `npm i pdf-parse@1`.");
